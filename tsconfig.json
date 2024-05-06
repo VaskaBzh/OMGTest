@@ -5,6 +5,11 @@
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@img/*": ["./src/assets/images/*"],
+      "@icon/*": ["./src/assets/icons/*"],
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",
