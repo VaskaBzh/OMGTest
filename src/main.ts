@@ -7,8 +7,5 @@ import "./styles/app.scss"
 const app = createApp(App);
 
 app.use(router)
+    .component("main-block", uiComponents[0])
     .mount('#app');
-
-for (const [key, value] of Object.entries(uiComponents)) {
-    app.component(key, value);
-}

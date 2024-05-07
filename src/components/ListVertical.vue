@@ -1,29 +1,52 @@
 <script setup lang="ts">
-import MainBlock from "./ui/MainBlock.vue";
 import ListHorizontal from "./ListHorizontal.vue";
 
-import { ref, Ref } from "vue";
-import { VerticalListService } from "./services";
+import { onMounted, reactive, Ref, ref, UnwrapNestedRefs, watch } from "vue";
+import { ListService } from "./services";
 import { ListContract } from "./contracts";
-import { ListModel } from "./models";
+import { ListType } from "@/types";
+import { LazyLoadTrait } from "@/traits";
 
-function createVerticalListService(): Ref<ListContract> {
-  return ref(VerticalListService.initVerticalList(100, 200, ListModel));
+function createVerticalListService(): UnwrapNestedRefs<ListContract<ListType<string>>> {
+	return reactive(ListService.initList<ListType<string>>(100, 200));
 }
 
-const verticalListService: Ref<ListContract> = createVerticalListService();
+const verticalListService: UnwrapNestedRefs<ListContract<ListType<string>>> = createVerticalListService();
+
+const dynamicalListLength: Ref<number> = ref(0);
+
+const loadListLazy = () => {
+	if (verticalListService.isComplete) {
+		LazyLoadTrait.loadList(dynamicalListLength, verticalListService.length, 10);
+	}
+}
+
+onMounted(loadListLazy)
+watch(() => verticalListService.isComplete, loadListLazy);
 </script>
 
 <template>
-  <ul class="list list-vertical">
-    <main-block
-      v-for="(_, listIndex) in verticalListService"
-      :key="listIndex"
-    >
-      <list-horizontal />
-    </main-block>
-  </ul>
+	<div class="block" v-show="verticalListService.isComplete">
+		<ul class="list list-vertical">
+			<li
+				class="list-vertical_element"
+				v-for="i in dynamicalListLength"
+				:key="i"
+			>
+				<list-horizontal
+					:list-size="verticalListService.length"
+					:number-list="verticalListService.list[i]"
+				/>
+			</li>
+		</ul>
+	</div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
+.list {
+	&-vertical {
+		flex-direction: column;
+		width: fit-content;
+	}
+}
 </style>

@@ -1,2 +1,1 @@
-export { ListContract } from "./ListContract.ts";
-export { HorizontalListContract } from "./HorizontalListContract";
+export type { ListContract } from "./ListContract";

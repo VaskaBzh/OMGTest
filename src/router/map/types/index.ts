@@ -1,1 +1,1 @@
-export { RoutesMapType } from "./RoutesMapType";
+export type { RoutesMapType } from "./RoutesMapType";

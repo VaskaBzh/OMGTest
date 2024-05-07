@@ -5,6 +5,7 @@ export const routes: RouteRecord[] = [
     {
         path: "/",
         name: "home",
-        component: RoutesMap.public.home,
+        // @ts-ignore
+        component: RoutesMap.public["home"],
     }
 ]
